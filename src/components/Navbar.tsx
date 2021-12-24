@@ -10,7 +10,7 @@ const Navbar: React.FC<{}> = ({}) => {
     <Box>
       <Flex minH="60px" align="center">
         <Flex
-          flex={{ base: 1, md: "auto" }}
+          flex={{ base: 2, md: "auto" }}
           ml={{ base: -2 }}
           display={{ base: "flex", md: "none" }}
         >
@@ -31,7 +31,7 @@ const Navbar: React.FC<{}> = ({}) => {
             fontSize={{ base: "md", md: "lg" }}
             textAlign={{ base: "center", md: "left" }}
           >
-            Crypto Tracker
+            Crypto Watch
           </Text>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>

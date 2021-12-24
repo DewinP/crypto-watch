@@ -9,14 +9,28 @@ import {
   Text,
   Image,
   TableRowProps,
+  Divider,
+  Collapse,
+  useDisclosure,
+  Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { MdFavoriteBorder } from "react-icons/md";
+import { MdFavoriteBorder, MdOutlineMoreVert } from "react-icons/md";
 import { ICoin } from "../interfaces";
+import CoinModal from "./CoinModal";
 
 const MotionTr = motion<TableRowProps>(Tr);
 
 const CoinListItem: React.FC<{ coin: ICoin }> = ({ coin }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <MotionTr
       initial={{ opacity: 0 }}
@@ -95,13 +109,27 @@ const CoinListItem: React.FC<{ coin: ICoin }> = ({ coin }) => {
         </Text>
       </Td>
       <Td isNumeric>
-        <Tooltip label="Add to favorites" hasArrow>
-          <IconButton
-            size="sm"
-            aria-label="Favorite"
-            icon={<MdFavoriteBorder />}
-          />
-        </Tooltip>
+        <Flex align="center">
+          <Tooltip label="Add to favorites" hasArrow>
+            <IconButton
+              size="sm"
+              variant="ghost"
+              aria-label="Favorite"
+              icon={<MdFavoriteBorder />}
+            />
+          </Tooltip>
+          <Divider height="20px" opacity={100} mx={1} orientation="vertical" />
+          <Tooltip label="Show more" hasArrow>
+            <IconButton
+              onClick={onOpen}
+              size="sm"
+              variant="ghost"
+              aria-label="Show more"
+              icon={<MdOutlineMoreVert />}
+            />
+          </Tooltip>
+        </Flex>
+        <CoinModal coin={coin} isOpen={isOpen} onClose={onClose} />
       </Td>
     </MotionTr>
   );
