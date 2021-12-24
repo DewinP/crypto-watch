@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 
 const Layout: React.FC<{}> = ({ children }) => {
   return (
-    <Box px={{ base: 4, md: 8 }}>
+    <Box px={{ base: 4, md: 8 }} mb={5}>
       <Navbar />
       <Divider />
       <Center>
