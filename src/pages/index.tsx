@@ -14,6 +14,8 @@ import {
   InputLeftElement,
   ButtonGroup,
   TableCaption,
+  Skeleton,
+  Td,
 } from "@chakra-ui/react";
 import { useGetAllCoinPricesQuery } from "../app/services/cryptoApi";
 import Layout from "../components/Layout";
@@ -130,7 +132,7 @@ const Index = () => {
               {coins.length === 0 && !isLoading && searchTerm !== "" && (
                 <TableCaption>No coins found for: {searchTerm}</TableCaption>
               )}
-
+              {isLoading && <TableCaption>Loading coins...</TableCaption>}
               <Thead>
                 <Tr>
                   <Th>Rank</Th>
@@ -142,6 +144,7 @@ const Index = () => {
                   <Th isNumeric>Actions</Th>
                 </Tr>
               </Thead>
+
               <Tbody>
                 {coins?.map((coin) => {
                   return <CoinListItem key={coin.id} coin={coin} />;

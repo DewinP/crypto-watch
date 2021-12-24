@@ -10,16 +10,7 @@ import {
   Image,
   TableRowProps,
   Divider,
-  Collapse,
   useDisclosure,
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { MdFavoriteBorder, MdOutlineMoreVert } from "react-icons/md";
