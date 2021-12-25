@@ -3,14 +3,14 @@ import bcrypt from "bcrypt";
 import config from "config";
 
 export interface UserInput {
-  name: string;
+  username: string;
   email: string;
   password: string;
 }
 
 export interface UserDocument extends mongoose.Document {
   email: string;
-  username: string;
+  name: string;
   password: string;
   createdAt: Date;
   updatedAt: Date;

@@ -3,6 +3,9 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import routes from "./routes";
+import connect from './utils/connect.utils';
+import deserializeUser from './middleware/deserializeUser';
 
 const PORT = config.get<number>("port");
 
@@ -17,6 +20,10 @@ app.use(
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+app.use(deserializeUser);
+
+app.listen(PORT, async ()=>{
+  await connect();
+  console.log(`Server is listening on port http://localhost:${PORT}/api`)
+  routes(app);
 });
