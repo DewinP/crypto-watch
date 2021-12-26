@@ -9,7 +9,6 @@ import {
   Text,
   Image,
   TableRowProps,
-  Tag,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -27,7 +26,7 @@ const CoinListItem: React.FC<{
   coin: ICoin;
   isFavoriteByUser: boolean;
   isLoggedIn: boolean;
-}> = ({ coin, isLoggedIn, isFavoriteByUser, likeCount }) => {
+}> = ({ coin, isFavoriteByUser, likeCount }) => {
   const [addToFavorite] = useCreateFavoriteMutation();
   const [deleteFavorite] = useDeleteFavoriteMutation();
   return (
@@ -44,18 +43,25 @@ const CoinListItem: React.FC<{
         {coin?.market_cap_rank}
       </Td>
       <Td>
-        <Link href={`/${coin.id}`}>
-          <Flex _hover={{ cursor: "pointer" }}>
-            <Image boxSize="30px" mr={10} src={coin.image} />
-            <Box color="back">
-              <Heading size="sm" fontWeight={400}>
-                {coin?.id[0].toUpperCase() + coin.id.slice(1)}
-              </Heading>
-              <Text color="blackAlpha.500" fontSize="13px">
-                {coin?.symbol.toUpperCase()}
-              </Text>
-            </Box>
-          </Flex>
+        <Link href={`https://www.coingecko.com/en/coins/${coin.id}`}>
+          <Tooltip
+            hasArrow
+            placement="top-start"
+            aria-label="redirect to coingecko.com"
+            label={`coingecko.com/en/coins/${coin.id}`}
+          >
+            <Flex _hover={{ cursor: "pointer" }}>
+              <Image boxSize="30px" mr={10} src={coin.image} />
+              <Box color="back">
+                <Heading size="sm" fontWeight={400}>
+                  {coin?.id[0].toUpperCase() + coin.id.slice(1)}
+                </Heading>
+                <Text color="blackAlpha.500" fontSize="13px">
+                  {coin?.symbol.toUpperCase()}
+                </Text>
+              </Box>
+            </Flex>
+          </Tooltip>
         </Link>
       </Td>
       <Td display={{ base: "none", md: "table-cell" }}>
