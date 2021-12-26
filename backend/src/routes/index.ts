@@ -10,7 +10,7 @@ import {
   createFavoriteHandler,
   deleteFavoriteHandler,
   findFavorites,
-} from "../controller/favorite.controller";
+} from "../controller/like.controller";
 import { createSessionSchema } from "../schema/session.schema";
 import {
   createSessionHandler,
@@ -44,13 +44,13 @@ const routes = (app: Express) => {
 
   //Favorties
 
-  app.get("/api/favorites",  findFavorites);
+  app.get("/api/likes",  findFavorites);
   app.post(
-    "/api/favorites/:coin_id",
+    "/api/likes/:coin_id",
     requireUser,
     createFavoriteHandler
   );
-  app.delete("/api/favorites/:coin_id", requireUser, deleteFavoriteHandler);
+  app.delete("/api/likes/:coin_id", requireUser, deleteFavoriteHandler);
 };
 
 export default routes;

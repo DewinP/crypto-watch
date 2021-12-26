@@ -5,13 +5,13 @@ import { api } from "./api";
 
 interface AuthState {
   user: IUser | undefined;
-  favoriteCoins: Record<string, boolean>;
+  likeCoins: Record<string, boolean>;
   isFetching: boolean;
   isLoggedIn: boolean;
 }
 
 const initialState: AuthState = {
-  favoriteCoins: {},
+  likeCoins: {},
   user: undefined,
   isFetching: false,
   isLoggedIn: false,
@@ -35,7 +35,7 @@ export const authSlice = createSlice({
       api.endpoints.createFavorite.matchFulfilled,
       (state, { payload }) => {
         if (payload._id) {
-          state.favoriteCoins[payload.coin_id] = true;
+          state.likeCoins[payload.coin_id] = true;
         }
       }
     );
@@ -43,7 +43,7 @@ export const authSlice = createSlice({
       api.endpoints.deleteFavorite.matchFulfilled,
       (state, { payload }) => {
         if (payload._id) {
-          state.favoriteCoins[payload.coin_id] = false;
+          state.likeCoins[payload.coin_id] = false;
         }
       }
     );
@@ -53,7 +53,7 @@ export const authSlice = createSlice({
         if (payload) {
           payload.forEach(({ coin_id, user_id }) => {
             if (user_id === state.user?._id) {
-              state.favoriteCoins[coin_id] = true;
+              state.likeCoins[coin_id] = true;
             }
           });
         }

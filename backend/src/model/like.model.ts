@@ -6,7 +6,7 @@ export interface FavoriteDocument extends mongoose.Document {
   coin_id: string;
 }
 
-const favoriteSchema = new mongoose.Schema(
+const likeSchema = new mongoose.Schema(
   {
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     coin_id: { type: String, required: true },
@@ -17,8 +17,8 @@ const favoriteSchema = new mongoose.Schema(
 );
 
 const FavoriteModel = mongoose.model<FavoriteDocument>(
-  "favorite",
-  favoriteSchema
+  "like",
+  likeSchema
 );
 
 export default FavoriteModel;

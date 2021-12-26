@@ -47,5 +47,5 @@ export interface IFavoriteCoin {
     user_id: string;
 }
 
-export type SortCoinType = 'price_desc' | 'price_asc' | 'market_cap_desc' | 'market_cap_asc' | 'favorite';
+export type SortCoinType = 'price_desc' | 'price_asc' | 'market_cap_desc' | 'market_cap_asc' | 'like';
 

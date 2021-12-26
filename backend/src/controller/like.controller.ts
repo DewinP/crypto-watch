@@ -1,5 +1,5 @@
-import { CreateFavoriteInput} from "../schema/favorite.schema";
-import { createFavorite, deleteFavorite, findAllFavorites } from "../service/favorite.service";
+import { CreateFavoriteInput} from "../schema/like.schema";
+import { createFavorite, deleteFavorite, findAllFavorites } from "../service/like.service";
 import { Request, Response } from "express";
 
 
@@ -14,8 +14,8 @@ export const createFavoriteHandler = async (req: Request<CreateFavoriteInput["pa
 
 
 export const findFavorites = async (_: Request, res: Response) => {
-    const favorites= await findAllFavorites({})
-    return res.send(favorites)
+    const likes= await findAllFavorites({})
+    return res.send(likes)
 }
 
 export async function deleteFavoriteHandler(

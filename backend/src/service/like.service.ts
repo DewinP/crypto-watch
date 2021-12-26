@@ -1,5 +1,5 @@
 import { DocumentDefinition, FilterQuery, QueryOptions } from "mongoose"
-import FavoriteModel, { FavoriteDocument } from "../model/favorites.model"
+import FavoriteModel, { FavoriteDocument } from "../model/like.model"
 
 export const createFavorite = async(input: DocumentDefinition<Omit<FavoriteDocument,"createdAt" | "updatedAt">>)=>{
     return FavoriteModel.create(input)

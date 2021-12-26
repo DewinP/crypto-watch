@@ -46,7 +46,7 @@ export const api = createApi({
       }),
       getAllFavoriteCoins: build.query<IFavoriteCoin[], void>({
         query: () => ({
-          url: "favorites",
+          url: "likes",
           method: "GET",
           credentials: "include",
         }),
@@ -63,7 +63,7 @@ export const api = createApi({
       }),
       createFavorite: build.mutation<IFavoriteCoin, { coin_id: string }>({
         query: ({ coin_id }) => ({
-          url: `favorites/${coin_id}`,
+          url: `likes/${coin_id}`,
           method: "POST",
           credentials: "include",
         }),
@@ -74,7 +74,7 @@ export const api = createApi({
       }),
       deleteFavorite: build.mutation<IFavoriteCoin, { coin_id: string }>({
         query: ({ coin_id }) => ({
-          url: `favorites/${coin_id}`,
+          url: `likes/${coin_id}`,
           method: "DELETE",
           credentials: "include",
         }),

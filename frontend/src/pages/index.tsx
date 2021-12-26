@@ -33,27 +33,25 @@ import { useGetAllFavoriteCoinsQuery } from "../app/services/api";
 const Index = () => {
   const { data, isLoading } = useGetAllCoinPricesQuery();
   const { data: allFavoriteCoins } = useGetAllFavoriteCoinsQuery();
-  let { isLoggedIn, favoriteCoins } = useAppSelector(selectCurrentUser);
+  let { isLoggedIn, likeCoins } = useAppSelector(selectCurrentUser);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState<boolean>(false);
-  const [favoriteCoinsList, setFavoriteCoinsList] = useState<ICoin[]>([]);
+  const [likeCoinsList, setFavoriteCoinsList] = useState<ICoin[]>([]);
 
   useEffect(() => {
     if (data) {
       setCoins(data);
     }
-    if (data && favoriteCoins) {
-      let favoriteCoinsFormatted = data.filter(
-        (coin) => favoriteCoins[coin.id]
-      );
-      setFavoriteCoinsList(favoriteCoinsFormatted);
+    if (data && likeCoins) {
+      let likeCoinsFormatted = data.filter((coin) => likeCoins[coin.id]);
+      setFavoriteCoinsList(likeCoinsFormatted);
     }
-  }, [data, favoriteCoins]);
+  }, [data, likeCoins]);
   const [coins, setCoins] = useState<ICoin[]>([]);
   const [sortBy, setSortBy] = useState<SortCoinType>("market_cap_desc");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchCoin = (searchTerm: string) => {
     let sortedCoins = sortCoins(
-      showFavoritesOnly ? favoriteCoinsList : data,
+      showFavoritesOnly ? likeCoinsList : data,
       sortBy
     );
 
@@ -121,7 +119,7 @@ const Index = () => {
                   colorScheme="green"
                   onClick={() => {
                     setShowFavoritesOnly(true);
-                    setCoins(favoriteCoinsList);
+                    setCoins(likeCoinsList);
                     setSearchTerm("");
                   }}
                   leftIcon={<MdFavorite />}
@@ -179,9 +177,9 @@ const Index = () => {
                 <TableCaption>No coins found for: {searchTerm}</TableCaption>
               )}
               {isLoading && <TableCaption>Loading coins...</TableCaption>}
-              {favoriteCoinsList.length === 0 && (
+              {likeCoinsList.length === 0 && (
                 <TableCaption>
-                  You don't have any favorite coins yet, go ahead and add some!
+                  You don't have any like coins yet, go ahead and add some!
                 </TableCaption>
               )}
               <Thead>
@@ -206,18 +204,16 @@ const Index = () => {
 
               <Tbody>
                 {coins?.map((coin) => {
-                  if (showFavoritesOnly && !favoriteCoins[coin.id]) return null;
+                  if (showFavoritesOnly && !likeCoins[coin.id]) return null;
 
-                  let favoriteCount = allFavoriteCoins?.filter(
-                    (favoriteCoin) => {
-                      return favoriteCoin.coin_id === coin.id;
-                    }
-                  )?.length;
+                  let likeCount = allFavoriteCoins?.filter((likeCoin) => {
+                    return likeCoin.coin_id === coin.id;
+                  })?.length;
                   return (
                     <CoinListItem
-                      favoriteCount={favoriteCount}
+                      likeCount={likeCount}
                       isLoggedIn={isLoggedIn}
-                      isFavoriteByUser={favoriteCoins[coin.id]}
+                      isFavoriteByUser={likeCoins[coin.id]}
                       key={coin.id}
                       coin={coin}
                     />

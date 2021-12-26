@@ -23,11 +23,11 @@ import { ICoin } from "../interfaces";
 const MotionTr = motion<TableRowProps>(Tr);
 
 const CoinListItem: React.FC<{
-  favoriteCount: number;
+  likeCount: number;
   coin: ICoin;
   isFavoriteByUser: boolean;
   isLoggedIn: boolean;
-}> = ({ coin, isLoggedIn, isFavoriteByUser, favoriteCount }) => {
+}> = ({ coin, isLoggedIn, isFavoriteByUser, likeCount }) => {
   const [addToFavorite] = useCreateFavoriteMutation();
   const [deleteFavorite] = useDeleteFavoriteMutation();
   return (
@@ -116,7 +116,7 @@ const CoinListItem: React.FC<{
       </Td>
       <Td isNumeric>
         <Flex align="center" justifyContent="center">
-          <Text>{favoriteCount > 0 && favoriteCount}</Text>
+          <Text>{likeCount > 0 && likeCount}</Text>
           <Tooltip
             label={
               isFavoriteByUser
