@@ -39,11 +39,13 @@ export interface IUser {
     exp: number;
   }
 
+
+
 export interface IFavoriteCoin {
     coin_id: string;
     _id: string;
     user_id: string;
 }
 
-export type SortCoinType = 'price_desc' | 'price_asc' | 'market_cap_desc' | 'market_cap_asc'
+export type SortCoinType = 'price_desc' | 'price_asc' | 'market_cap_desc' | 'market_cap_asc' | 'favorite';
 

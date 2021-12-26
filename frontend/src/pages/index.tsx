@@ -14,8 +14,8 @@ import {
   InputLeftElement,
   ButtonGroup,
   TableCaption,
-  Skeleton,
-  Td,
+  HStack,
+  Center,
 } from "@chakra-ui/react";
 import { useGetAllCoinPricesQuery } from "../app/services/cryptoApi";
 import Layout from "../components/Layout";
@@ -26,19 +26,36 @@ import { ICoin, SortCoinType } from "../interfaces";
 import { FaSearchDollar } from "react-icons/fa";
 import { MdFavorite } from "react-icons/md";
 import { RiCheckboxMultipleBlankFill } from "react-icons/ri";
+import { useAppSelector } from "../app/hooks";
+import { selectCurrentUser } from "../app/services/auth.slice";
+import { useGetAllFavoriteCoinsQuery } from "../app/services/api";
 
 const Index = () => {
   const { data, isLoading } = useGetAllCoinPricesQuery();
+  const { data: allFavoriteCoins } = useGetAllFavoriteCoinsQuery();
+  let { isLoggedIn, favoriteCoins } = useAppSelector(selectCurrentUser);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState<boolean>(false);
+  const [favoriteCoinsList, setFavoriteCoinsList] = useState<ICoin[]>([]);
+
   useEffect(() => {
     if (data) {
       setCoins(data);
     }
-  }, [data]);
+    if (data && favoriteCoins) {
+      let favoriteCoinsFormatted = data.filter(
+        (coin) => favoriteCoins[coin.id]
+      );
+      setFavoriteCoinsList(favoriteCoinsFormatted);
+    }
+  }, [data, favoriteCoins]);
   const [coins, setCoins] = useState<ICoin[]>([]);
   const [sortBy, setSortBy] = useState<SortCoinType>("market_cap_desc");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchCoin = (searchTerm: string) => {
-    let sortedCoins = sortCoins(data, sortBy);
+    let sortedCoins = sortCoins(
+      showFavoritesOnly ? favoriteCoinsList : data,
+      sortBy
+    );
 
     let filteredCoins = sortedCoins.filter((coin) => {
       return (
@@ -77,11 +94,10 @@ const Index = () => {
     <Layout>
       <AnimatePresence>
         <Stack>
-          <Flex
+          <HStack
             textAlign="center"
             align="center"
-            w="100%"
-            justifyContent="space-between"
+            flexDirection={{ base: "column", md: "row" }}
           >
             <InputGroup size="sm">
               <InputLeftElement
@@ -90,24 +106,54 @@ const Index = () => {
               />
               <Input
                 maxW="500px"
+                value={searchTerm}
                 onChange={handleSearchChange}
                 placeholder="Search for a coin"
               />
             </InputGroup>
-            <ButtonGroup colorScheme="green" size="sm" mr={10}>
-              <Button leftIcon={<MdFavorite />} variant="outline">
-                Only Favorites
-              </Button>
+            {isLoggedIn && (
+              <Flex w="100%">
+                <Button
+                  isFullWidth
+                  my={{ base: 2, md: 0 }}
+                  size="sm"
+                  mr={2}
+                  colorScheme="green"
+                  onClick={() => {
+                    setShowFavoritesOnly(true);
+                    setCoins(favoriteCoinsList);
+                    setSearchTerm("");
+                  }}
+                  leftIcon={<MdFavorite />}
+                  variant={showFavoritesOnly ? "solid" : "outline"}
+                >
+                  Only Favorites
+                </Button>
 
-              <Button
-                leftIcon={<RiCheckboxMultipleBlankFill />}
-                variant={"solid"}
-              >
-                Show All
-              </Button>
-            </ButtonGroup>
+                <Button
+                  isFullWidth
+                  my={{ base: 2, md: 0 }}
+                  size="sm"
+                  colorScheme="green"
+                  leftIcon={<RiCheckboxMultipleBlankFill />}
+                  onClick={() => {
+                    setShowFavoritesOnly(false);
+                    setCoins(data);
+                    setSearchTerm("");
+                  }}
+                  variant={!showFavoritesOnly ? "solid" : "outline"}
+                >
+                  Show All
+                </Button>
+              </Flex>
+            )}
 
-            <Flex alignSelf="end" minW="fit-content" alignItems="center">
+            <Flex
+              alignSelf={{ base: "center", md: "end" }}
+              minW="fit-content"
+              alignItems="center"
+              width={{ base: "100%", md: "auto" }}
+            >
               <Text fontWeight="bold">Sort By:</Text>
               <Select
                 onChange={handleSelectChange}
@@ -122,32 +168,60 @@ const Index = () => {
                 <option value="price_asc">Price Asc</option>
               </Select>
             </Flex>
-          </Flex>
+          </HStack>
           <Flex
             border="1px solid"
             borderColor="blackAlpha.200"
             borderRadius={5}
           >
-            <Table size="md">
+            <Table>
               {coins.length === 0 && !isLoading && searchTerm !== "" && (
                 <TableCaption>No coins found for: {searchTerm}</TableCaption>
               )}
               {isLoading && <TableCaption>Loading coins...</TableCaption>}
+              {favoriteCoinsList.length === 0 && (
+                <TableCaption>
+                  You don't have any favorite coins yet, go ahead and add some!
+                </TableCaption>
+              )}
               <Thead>
                 <Tr>
-                  <Th>Rank</Th>
+                  <Th display={{ base: "none", md: "table-cell" }}>Rank</Th>
                   <Th>Coin</Th>
-                  <Th>Price 24h</Th>
-                  <Th>Market Cap</Th>
-                  <Th>24-hr high</Th>
-                  <Th>24-hr low</Th>
-                  <Th isNumeric>Actions</Th>
+                  <Th display={{ base: "none", md: "table-cell" }}>
+                    Price 24h
+                  </Th>
+                  <Th display={{ base: "none", md: "table-cell" }}>
+                    Market Cap
+                  </Th>
+                  <Th display={{ base: "none", md: "table-cell" }}>
+                    24-hr high
+                  </Th>
+                  <Th display={{ base: "none", md: "table-cell" }}>
+                    24-hr low
+                  </Th>
+                  {isLoggedIn && <Th isNumeric>Actions</Th>}
                 </Tr>
               </Thead>
 
               <Tbody>
                 {coins?.map((coin) => {
-                  return <CoinListItem key={coin.id} coin={coin} />;
+                  if (showFavoritesOnly && !favoriteCoins[coin.id]) return null;
+
+                  let favoriteCount = allFavoriteCoins?.filter(
+                    (favoriteCoin) => {
+                      return favoriteCoin.coin_id === coin.id;
+                    }
+                  )?.length;
+                  return (
+                    <CoinListItem
+                      favoriteCount={favoriteCount}
+                      isLoggedIn={isLoggedIn}
+                      isFavoriteByUser={favoriteCoins[coin.id]}
+                      key={coin.id}
+                      coin={coin}
+                    />
+                  );
                 })}
               </Tbody>
             </Table>

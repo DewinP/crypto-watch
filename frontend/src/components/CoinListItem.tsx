@@ -9,41 +9,56 @@ import {
   Text,
   Image,
   TableRowProps,
-  Divider,
-  useDisclosure,
+  Tag,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { MdFavoriteBorder, MdOutlineMoreVert } from "react-icons/md";
+import Link from "next/link";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import {
+  useCreateFavoriteMutation,
+  useDeleteFavoriteMutation,
+} from "../app/services/api";
 import { ICoin } from "../interfaces";
-import CoinModal from "./CoinModal";
 
 const MotionTr = motion<TableRowProps>(Tr);
 
-const CoinListItem: React.FC<{ coin: ICoin }> = ({ coin }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
+const CoinListItem: React.FC<{
+  favoriteCount: number;
+  coin: ICoin;
+  isFavoriteByUser: boolean;
+  isLoggedIn: boolean;
+}> = ({ coin, isLoggedIn, isFavoriteByUser, favoriteCount }) => {
+  const [addToFavorite] = useCreateFavoriteMutation();
+  const [deleteFavorite] = useDeleteFavoriteMutation();
   return (
     <MotionTr
+      _hover={{
+        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+      }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       layout
       key={coin?.id}
     >
-      <Td>{coin?.market_cap_rank}</Td>
-      <Td>
-        <Flex>
-          <Image boxSize="30px" mr={10} src={coin.image} />
-          <Box color="back">
-            <Heading size="sm" fontWeight={400}>
-              {coin?.id[0].toUpperCase() + coin.id.slice(1)}
-            </Heading>
-            <Text color="blackAlpha.500" fontSize="13px">
-              {coin?.symbol.toUpperCase()}
-            </Text>
-          </Box>
-        </Flex>
+      <Td display={{ base: "none", md: "table-cell" }}>
+        {coin?.market_cap_rank}
       </Td>
       <Td>
+        <Link href={`/${coin.id}`}>
+          <Flex _hover={{ cursor: "pointer" }}>
+            <Image boxSize="30px" mr={10} src={coin.image} />
+            <Box color="back">
+              <Heading size="sm" fontWeight={400}>
+                {coin?.id[0].toUpperCase() + coin.id.slice(1)}
+              </Heading>
+              <Text color="blackAlpha.500" fontSize="13px">
+                {coin?.symbol.toUpperCase()}
+              </Text>
+            </Box>
+          </Flex>
+        </Link>
+      </Td>
+      <Td display={{ base: "none", md: "table-cell" }}>
         <Box>
           <Heading size="sm" fontWeight={400}>
             {coin?.current_price.toLocaleString(undefined, {
@@ -62,7 +77,7 @@ const CoinListItem: React.FC<{ coin: ICoin }> = ({ coin }) => {
           </Text>
         </Box>
       </Td>
-      <Td>
+      <Td display={{ base: "none", md: "table-cell" }}>
         <Box>
           <Heading size="sm" fontWeight={400}>
             {coin?.market_cap?.toLocaleString(undefined, {
@@ -83,7 +98,7 @@ const CoinListItem: React.FC<{ coin: ICoin }> = ({ coin }) => {
           </Text>
         </Box>
       </Td>
-      <Td>
+      <Td display={{ base: "none", md: "table-cell" }}>
         <Text color="green.400">
           {coin?.high_24h?.toLocaleString(undefined, {
             style: "currency",
@@ -91,7 +106,7 @@ const CoinListItem: React.FC<{ coin: ICoin }> = ({ coin }) => {
           })}
         </Text>
       </Td>
-      <Td>
+      <Td display={{ base: "none", md: "table-cell" }}>
         <Text color="red.400" as="span">
           {coin?.low_24h?.toLocaleString(undefined, {
             style: "currency",
@@ -99,29 +114,34 @@ const CoinListItem: React.FC<{ coin: ICoin }> = ({ coin }) => {
           })}
         </Text>
       </Td>
-      <Td isNumeric>
-        <Flex align="center">
-          <Tooltip label="Add to favorites" hasArrow>
-            <IconButton
-              size="sm"
-              variant="ghost"
-              aria-label="Favorite"
-              icon={<MdFavoriteBorder />}
-            />
-          </Tooltip>
-          <Divider height="20px" opacity={100} mx={1} orientation="vertical" />
-          <Tooltip label="Show more" hasArrow>
-            <IconButton
-              onClick={onOpen}
-              size="sm"
-              variant="ghost"
-              aria-label="Show more"
-              icon={<MdOutlineMoreVert />}
-            />
-          </Tooltip>
-        </Flex>
-        <CoinModal coin={coin} isOpen={isOpen} onClose={onClose} />
-      </Td>
+      {isLoggedIn && (
+        <Td isNumeric>
+          <Flex align="center" justifyContent="center">
+            <Text>{favoriteCount > 0 && favoriteCount}</Text>
+            <Tooltip
+              label={
+                isFavoriteByUser ? "Remove from favorites" : "Add to favorites"
+              }
+              hasArrow
+            >
+              <IconButton
+                size="sm"
+                variant="ghost"
+                colorScheme="green"
+                aria-label="Favorite"
+                icon={isFavoriteByUser ? <MdFavorite /> : <MdFavoriteBorder />}
+                onClick={async () => {
+                  if (!isFavoriteByUser) {
+                    await addToFavorite({ coin_id: coin.id }).unwrap();
+                  } else {
+                    await deleteFavorite({ coin_id: coin.id }).unwrap();
+                  }
+                }}
+              />
+            </Tooltip>
+          </Flex>
+        </Td>
+      )}
     </MotionTr>
   );
 };

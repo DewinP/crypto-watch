@@ -1,22 +1,15 @@
-import { boolean, object, string, TypeOf } from 'zod'
+import { object, string, TypeOf } from 'zod'
 
-
-const payload = {
-    body: object({
-        coin_id:string().nonempty(),
-
-    })
-}
 
 const params = {
     params: object({
         user_id: string(),
+        coin_id: string(),
     })
 }
 
 
    export const createFavoriteSchema = object({
-       ...payload,
        ...params
    })
    

@@ -10,7 +10,7 @@ export const cryptoApi = createApi({
     return {
       getAllCoinPrices: build.query<ICoin[], void>({
         query: () => ({
-          url: `/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false`,
+          url: `/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`,
           method: "GET",
         }),
         providesTags: (result) =>

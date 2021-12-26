@@ -1,15 +1,15 @@
 import { Box, Center } from "@chakra-ui/react";
-import Navbar from "./Navbar/Navbar";
+import Navbar from "./Navbar";
 
 const Layout: React.FC<{}> = ({ children }) => {
   return (
     <>
       <Center backgroundColor="blue.500">
-        <Box px={{ base: 4, md: 8 }} maxW="80em" w="100%">
+        <Box px={8} maxW="80em" w="100%">
           <Navbar />
         </Box>
       </Center>
-      <Box px={{ base: 4, md: 8 }} mb={5}>
+      <Box px={8} mb={5}>
         <Center>
           <Box
             marginTop={8}

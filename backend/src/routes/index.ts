@@ -9,9 +9,8 @@ import { createUserSchema } from "../schema/user.schema";
 import {
   createFavoriteHandler,
   deleteFavoriteHandler,
-  findAllFavoritesByUser,
+  findFavorites,
 } from "../controller/favorite.controller";
-import { createFavoriteSchema } from "../schema/favorite.schema";
 import { createSessionSchema } from "../schema/session.schema";
 import {
   createSessionHandler,
@@ -36,7 +35,6 @@ const routes = (app: Express) => {
   app.delete("/api/sessions", requireUser, deleteSessionHandler);
 
   //User
-
   app.post(
     "/api/users/signup",
     validateResource(createUserSchema),
@@ -46,11 +44,10 @@ const routes = (app: Express) => {
 
   //Favorties
 
-  app.get("/api/favorites", requireUser, findAllFavoritesByUser);
+  app.get("/api/favorites",  findFavorites);
   app.post(
-    "/api/favorites",
+    "/api/favorites/:coin_id",
     requireUser,
-    validateResource(createFavoriteSchema),
     createFavoriteHandler
   );
   app.delete("/api/favorites/:coin_id", requireUser, deleteFavoriteHandler);

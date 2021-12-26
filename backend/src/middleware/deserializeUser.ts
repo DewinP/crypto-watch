@@ -9,8 +9,12 @@ const deserializeUser = async (
   res: Response,
   next: NextFunction
 ) => {
+
   const accessToken:string =  get(req, "cookies.accessToken");
   const refreshToken:string =  get(req, "cookies.refreshToken");
+
+
+
   if (!accessToken) {
     return next();
   }
@@ -38,8 +42,9 @@ const deserializeUser = async (
 
     const result = verifyJWT(newAccessToken as string);
 
+
     res.locals.user = result.decoded;
-    return next();
+    return next()
   }
 
   return next();

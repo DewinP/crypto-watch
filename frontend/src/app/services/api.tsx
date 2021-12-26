@@ -35,14 +35,14 @@ export const api = createApi({
           body: input,
         }),
       }),
-      loginUser: build.mutation<{}, ILoginInput>({
+      loginUser: build.mutation<IUser, ILoginInput>({
         query: (input) => ({
           url: "sessions",
           method: "POST",
           body: input,
           credentials: "include",
         }),
-        invalidatesTags: ["Me"],
+        invalidatesTags: [{ type: "Me" }, { type: "FavoriteCoin", id: "LIST" }],
       }),
       getAllFavoriteCoins: build.query<IFavoriteCoin[], void>({
         query: () => ({
@@ -62,15 +62,14 @@ export const api = createApi({
             : [{ type: "FavoriteCoin" as const, id: "LIST" }],
       }),
       createFavorite: build.mutation<IFavoriteCoin, { coin_id: string }>({
-        query: (input) => ({
-          url: "favorites",
+        query: ({ coin_id }) => ({
+          url: `favorites/${coin_id}`,
           method: "POST",
-          body: input,
           credentials: "include",
         }),
         invalidatesTags: (result) => [
           { type: "FavoriteCoin", id: "LIST" },
-          { type: "FavoriteCoin", id: result.coin_id },
+          { type: "FavoriteCoin", id: result?.coin_id },
         ],
       }),
       deleteFavorite: build.mutation<IFavoriteCoin, { coin_id: string }>({
@@ -92,4 +91,5 @@ export const {
   useSignupUserMutation,
   useMeQuery,
   useLogoutMutation,
+  useGetAllFavoriteCoinsQuery,
 } = api;

@@ -30,7 +30,9 @@ const Login: React.FC = () => {
         onSubmit={async (values, { setErrors }) => {
           try {
             await login(values).unwrap();
-            router.push("/");
+            setTimeout(() => {
+              router.push("/");
+            }, 100);
           } catch (error) {
             if (error.status === 400) {
               setErrors(toErrorMap(error.data));

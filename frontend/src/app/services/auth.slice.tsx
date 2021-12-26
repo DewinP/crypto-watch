@@ -5,11 +5,13 @@ import { api } from "./api";
 
 interface AuthState {
   user: IUser | undefined;
+  favoriteCoins: Record<string, boolean>;
   isFetching: boolean;
   isLoggedIn: boolean;
 }
 
 const initialState: AuthState = {
+  favoriteCoins: {},
   user: undefined,
   isFetching: false,
   isLoggedIn: false,
@@ -20,6 +22,44 @@ export const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (build) => {
+    build.addMatcher(
+      api.endpoints.loginUser.matchFulfilled,
+      (state, { payload }) => {
+        if (payload._id) {
+          state.user = payload;
+          state.isLoggedIn = true;
+        }
+      }
+    );
+    build.addMatcher(
+      api.endpoints.createFavorite.matchFulfilled,
+      (state, { payload }) => {
+        if (payload._id) {
+          state.favoriteCoins[payload.coin_id] = true;
+        }
+      }
+    );
+    build.addMatcher(
+      api.endpoints.deleteFavorite.matchFulfilled,
+      (state, { payload }) => {
+        if (payload._id) {
+          state.favoriteCoins[payload.coin_id] = false;
+        }
+      }
+    );
+    build.addMatcher(
+      api.endpoints.getAllFavoriteCoins.matchFulfilled,
+      (state, { payload }) => {
+        if (payload) {
+          payload.forEach(({ coin_id, user_id }) => {
+            if (user_id === state.user?._id) {
+              state.favoriteCoins[coin_id] = true;
+            }
+          });
+        }
+      }
+    );
+
     build.addMatcher(api.endpoints.me.matchFulfilled, (state, { payload }) => {
       if (payload._id) {
         state.user = payload;
