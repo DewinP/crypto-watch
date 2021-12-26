@@ -10,11 +10,12 @@ const PORT = config.get<number>("port");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: config.get<string>("origin"),
-  })
-);
+app.use(cors(
+  {
+      origin: config.get<string>('origin'),
+      credentials: true,
+  }
+));
 
 app.use(morgan("dev"));
 app.use(cookieParser());

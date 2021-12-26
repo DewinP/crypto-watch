@@ -5,10 +5,10 @@ import { signJWT } from './../utils/jwt.utils';
 import config from 'config'
 
 export async function createSessionHandler(req: Request, res: Response) {
-    const user = await validatePassword(req.body)
+    const user = await validatePassword({username: req.body.username, password: req.body.password});
     if(!user) {
         return res.status(401).json({
-            message: 'Invalid email or password'
+            message: 'Invalid username or password'
         })
     } 
 

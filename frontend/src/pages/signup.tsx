@@ -11,15 +11,21 @@ import { Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import { RiContactsBookLine } from "react-icons/ri";
 import { toErrorMap } from "../../utils/toErrorMap";
+import { useSignupUserMutation } from "../app/services/api";
 import InputField from "../components/InputField";
 import Layout from "../components/Layout";
+import { ISignupInput } from "../interfaces";
 
 const Signup: React.FC = () => {
   const router = useRouter();
-  const initialValues = {
+  const [singup] = useSignupUserMutation();
+  const initialValues: ISignupInput = {
     email: "",
     password: "",
+    passwordConfirmation: "",
+    username: "",
   };
   return (
     <Layout>
@@ -27,15 +33,12 @@ const Signup: React.FC = () => {
         initialValues={initialValues}
         onSubmit={async (values, { setErrors }) => {
           try {
+            await singup(values).unwrap();
+            router.push("/login");
           } catch (error) {
+            console.log(error);
             if (error.status === 400) {
               setErrors(toErrorMap(error.data));
-            }
-            if (error.status === 401) {
-              setErrors({
-                email: "Invalid email or password",
-                password: "Invalid email or password",
-              });
             }
           }
         }}

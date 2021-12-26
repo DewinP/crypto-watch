@@ -12,13 +12,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { toErrorMap } from "../../utils/toErrorMap";
+import { useLoginUserMutation } from "../app/services/api";
 import InputField from "../components/InputField";
 import Layout from "../components/Layout";
 
 const Login: React.FC = () => {
   const router = useRouter();
+  const [login] = useLoginUserMutation();
   const initialValues = {
-    email: "",
+    username: "",
     password: "",
   };
   return (
@@ -27,14 +29,16 @@ const Login: React.FC = () => {
         initialValues={initialValues}
         onSubmit={async (values, { setErrors }) => {
           try {
+            await login(values).unwrap();
+            router.push("/");
           } catch (error) {
             if (error.status === 400) {
               setErrors(toErrorMap(error.data));
             }
             if (error.status === 401) {
               setErrors({
-                email: "Invalid email or password",
-                password: "Invalid email or password",
+                username: "Invalid username or password",
+                password: "Invalid username or password",
               });
             }
           }

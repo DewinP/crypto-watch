@@ -27,6 +27,18 @@ export interface ICoin {
     max_supply: number;
 }
 
+export interface IUser {
+    _id: string;
+    email: string;
+    username: string;
+    createdAt: Date;
+    updatedAt: Date;
+    __v: number;
+    session: string;
+    iat: number;
+    exp: number;
+  }
+
 export interface IFavoriteCoin {
     coin_id: string;
     _id: string;

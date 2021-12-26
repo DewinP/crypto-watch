@@ -3,7 +3,6 @@ import {
   createUserHandler,
   getCurrentUserHandler,
 } from "../controller/user.controller";
-import meQueryCheck from "../middleware/meQueryCheck";
 import requireUser from "../middleware/requireUser";
 import validateResource from "../middleware/validateResource";
 import { createUserSchema } from "../schema/user.schema";
@@ -29,12 +28,12 @@ const routes = (app: Express) => {
 
   //Session
   app.post(
-    "/api/session",
+    "/api/sessions",
     validateResource(createSessionSchema),
     createSessionHandler
   );
-  app.get("/api/session", requireUser, getUserSessionsHandler);
-  app.delete("/api/session", requireUser, deleteSessionHandler);
+  app.get("/api/sessions", requireUser, getUserSessionsHandler);
+  app.delete("/api/sessions", requireUser, deleteSessionHandler);
 
   //User
 
@@ -43,7 +42,7 @@ const routes = (app: Express) => {
     validateResource(createUserSchema),
     createUserHandler
   );
-  app.get("api/me", meQueryCheck, getCurrentUserHandler);
+  app.get("/api/me", requireUser, getCurrentUserHandler);
 
   //Favorties
 
