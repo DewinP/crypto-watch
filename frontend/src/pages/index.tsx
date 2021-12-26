@@ -127,7 +127,7 @@ const Index = () => {
                   leftIcon={<MdFavorite />}
                   variant={showFavoritesOnly ? "solid" : "outline"}
                 >
-                  Only Favorites
+                  Liked Coins
                 </Button>
 
                 <Button
@@ -200,7 +200,7 @@ const Index = () => {
                   <Th display={{ base: "none", md: "table-cell" }}>
                     24-hr low
                   </Th>
-                  {isLoggedIn && <Th isNumeric>Actions</Th>}
+                  <Th isNumeric>Likes</Th>
                 </Tr>
               </Thead>
 

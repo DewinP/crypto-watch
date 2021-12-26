@@ -114,34 +114,34 @@ const CoinListItem: React.FC<{
           })}
         </Text>
       </Td>
-      {isLoggedIn && (
-        <Td isNumeric>
-          <Flex align="center" justifyContent="center">
-            <Text>{favoriteCount > 0 && favoriteCount}</Text>
-            <Tooltip
-              label={
-                isFavoriteByUser ? "Remove from favorites" : "Add to favorites"
-              }
-              hasArrow
-            >
-              <IconButton
-                size="sm"
-                variant="ghost"
-                colorScheme="green"
-                aria-label="Favorite"
-                icon={isFavoriteByUser ? <MdFavorite /> : <MdFavoriteBorder />}
-                onClick={async () => {
-                  if (!isFavoriteByUser) {
-                    await addToFavorite({ coin_id: coin.id }).unwrap();
-                  } else {
-                    await deleteFavorite({ coin_id: coin.id }).unwrap();
-                  }
-                }}
-              />
-            </Tooltip>
-          </Flex>
-        </Td>
-      )}
+      <Td isNumeric>
+        <Flex align="center" justifyContent="center">
+          <Text>{favoriteCount > 0 && favoriteCount}</Text>
+          <Tooltip
+            label={
+              isFavoriteByUser
+                ? "Remove from liked coins"
+                : "Add to liked coins"
+            }
+            hasArrow
+          >
+            <IconButton
+              size="sm"
+              variant="ghost"
+              colorScheme="green"
+              aria-label="Favorite"
+              icon={isFavoriteByUser ? <MdFavorite /> : <MdFavoriteBorder />}
+              onClick={async () => {
+                if (!isFavoriteByUser) {
+                  await addToFavorite({ coin_id: coin.id }).unwrap();
+                } else {
+                  await deleteFavorite({ coin_id: coin.id }).unwrap();
+                }
+              }}
+            />
+          </Tooltip>
+        </Flex>
+      </Td>
     </MotionTr>
   );
 };
