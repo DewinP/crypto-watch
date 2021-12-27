@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import {
   useCreateFavoriteMutation,
@@ -26,7 +27,8 @@ const CoinListItem: React.FC<{
   coin: ICoin;
   isFavoriteByUser: boolean;
   isLoggedIn: boolean;
-}> = ({ coin, isFavoriteByUser, likeCount }) => {
+}> = ({ coin, isFavoriteByUser, likeCount, isLoggedIn }) => {
+  const router = useRouter();
   const [addToFavorite] = useCreateFavoriteMutation();
   const [deleteFavorite] = useDeleteFavoriteMutation();
   return (
@@ -125,7 +127,9 @@ const CoinListItem: React.FC<{
           <Text>{likeCount > 0 && likeCount}</Text>
           <Tooltip
             label={
-              isFavoriteByUser
+              !isLoggedIn
+                ? "Login to like!"
+                : isFavoriteByUser
                 ? "Remove from liked coins"
                 : "Add to liked coins"
             }
@@ -138,7 +142,9 @@ const CoinListItem: React.FC<{
               aria-label="Favorite"
               icon={isFavoriteByUser ? <MdFavorite /> : <MdFavoriteBorder />}
               onClick={async () => {
-                if (!isFavoriteByUser) {
+                if (!isLoggedIn) {
+                  router.push("/login");
+                } else if (!isFavoriteByUser) {
                   await addToFavorite({ coin_id: coin.id }).unwrap();
                 } else {
                   await deleteFavorite({ coin_id: coin.id }).unwrap();

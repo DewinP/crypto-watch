@@ -75,6 +75,7 @@ export const authSlice = createSlice({
     });
     build.addMatcher(api.endpoints.logout.matchRejected, (state) => {
       state.user = undefined;
+      state.likeCoins = {};
       state.isLoggedIn = false;
     });
   },

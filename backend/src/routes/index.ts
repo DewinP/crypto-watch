@@ -17,6 +17,7 @@ import {
   deleteSessionHandler,
   getUserSessionsHandler,
 } from "../controller/session.controller";
+import currentUserCheck from "../middleware/currentUserCheck";
 
 const routes = (app: Express) => {
 
@@ -40,7 +41,7 @@ const routes = (app: Express) => {
     validateResource(createUserSchema),
     createUserHandler
   );
-  app.get("/api/me", requireUser, getCurrentUserHandler);
+  app.get("/api/me", currentUserCheck, getCurrentUserHandler);
 
   //Favorties
 

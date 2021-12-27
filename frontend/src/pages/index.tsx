@@ -1,8 +1,5 @@
 import {
   Table,
-  Thead,
-  Tr,
-  Th,
   Tbody,
   Select,
   Flex,
@@ -12,11 +9,10 @@ import {
   Button,
   InputGroup,
   InputLeftElement,
-  ButtonGroup,
   TableCaption,
   HStack,
-  Center,
 } from "@chakra-ui/react";
+import React from "react";
 import { useGetAllCoinPricesQuery } from "../app/services/cryptoApi";
 import Layout from "../components/Layout";
 import CoinListItem from "../components/CoinListItem";
@@ -29,6 +25,9 @@ import { RiCheckboxMultipleBlankFill } from "react-icons/ri";
 import { useAppSelector } from "../app/hooks";
 import { selectCurrentUser } from "../app/services/auth.slice";
 import { useGetAllFavoriteCoinsQuery } from "../app/services/api";
+import TableHeader from "../components/TableHeader";
+
+const MemoCoinListItem = React.memo(CoinListItem);
 
 const Index = () => {
   const { data, isLoading } = useGetAllCoinPricesQuery();
@@ -154,16 +153,47 @@ const Index = () => {
             >
               <Text fontWeight="bold">Sort By:</Text>
               <Select
+                bg="#3182CE"
+                borderColor="#3182CE"
+                color="white"
                 onChange={handleSelectChange}
                 size="sm"
                 w="150px"
                 ml={1}
                 defaultValue={sortBy}
               >
-                <option value="market_cap_desc">Market Cap Desc</option>
-                <option value="market_cap_asc">Market Cap Asc</option>
-                <option value="price_desc">Price Desc</option>
-                <option value="price_asc">Price Asc</option>
+                <option
+                  style={{
+                    color: "black",
+                  }}
+                  value="market_cap_desc"
+                >
+                  Market Cap Desc
+                </option>
+                <option
+                  style={{
+                    color: "black",
+                  }}
+                  value="market_cap_asc"
+                >
+                  Market Cap Asc
+                </option>
+                <option
+                  style={{
+                    color: "black",
+                  }}
+                  value="price_desc"
+                >
+                  Price Desc
+                </option>
+                <option
+                  style={{
+                    color: "black",
+                  }}
+                  value="price_asc"
+                >
+                  Price Asc
+                </option>
               </Select>
             </Flex>
           </HStack>
@@ -177,40 +207,32 @@ const Index = () => {
                 <TableCaption>No coins found for: {searchTerm}</TableCaption>
               )}
               {isLoading && <TableCaption>Loading coins...</TableCaption>}
-              {likeCoinsList.length === 0 && (
+              {likeCoinsList.length === 0 && isLoggedIn && (
                 <TableCaption>
                   You don't have any like coins yet, go ahead and add some!
                 </TableCaption>
               )}
-              <Thead>
-                <Tr>
-                  <Th display={{ base: "none", md: "table-cell" }}>Rank</Th>
-                  <Th>Coin</Th>
-                  <Th display={{ base: "none", md: "table-cell" }}>
-                    Price 24h
-                  </Th>
-                  <Th display={{ base: "none", md: "table-cell" }}>
-                    Market Cap
-                  </Th>
-                  <Th display={{ base: "none", md: "table-cell" }}>
-                    24-hr high
-                  </Th>
-                  <Th display={{ base: "none", md: "table-cell" }}>
-                    24-hr low
-                  </Th>
-                  <Th isNumeric>Likes</Th>
-                </Tr>
-              </Thead>
+              <TableHeader
+                tableHeaders={[
+                  "Rank",
+                  "Coin",
+                  "Price 24h",
+                  "Market Cap",
+                  "24-hr high",
+                  "24-hr low",
+                  "likes",
+                ]}
+              />
 
               <Tbody>
-                {coins?.map((coin) => {
+                {sortCoins(coins, sortBy).map((coin) => {
                   if (showFavoritesOnly && !likeCoins[coin.id]) return null;
 
                   let likeCount = allFavoriteCoins?.filter((likeCoin) => {
                     return likeCoin.coin_id === coin.id;
                   })?.length;
                   return (
-                    <CoinListItem
+                    <MemoCoinListItem
                       likeCount={likeCount}
                       isLoggedIn={isLoggedIn}
                       isFavoriteByUser={likeCoins[coin.id]}

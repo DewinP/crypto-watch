@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 
-const requireUser = (_:Request, res:Response, next:NextFunction)=>{
+
+
+const currentUserCheck = (_:Request, res:Response, next:NextFunction)=>{
     const user = res.locals.user;
-    
     if(!user){
-        return res.sendStatus(403)
+        return res.json({})
     }
     return next();
 }
 
-export default requireUser;
+export default currentUserCheck;
