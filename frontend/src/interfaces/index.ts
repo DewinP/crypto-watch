@@ -27,6 +27,42 @@ export interface ICoin {
     max_supply: number;
 }
 
+export interface ISingleCoin {
+    id: string;
+    name: string;
+    symbol: string;
+    description: {
+        en: string;
+    }
+    image: {
+        large: string;
+        small: string;
+    }
+    market_data: {
+        current_price: {
+            usd: number;
+        }
+        market_cap: {
+            usd: number;
+        }
+        market_cap_rank: number
+        total_volume: {
+            usd: number;
+        }   
+        high_24h: {
+            usd: number;
+        }
+        low_24h: {
+            usd: number;
+        }
+        circulating_supply: number;
+        price_change_24h: number
+    }
+
+    
+}
+
+
 export interface IUser {
     _id: string;
     email: string;
@@ -37,7 +73,8 @@ export interface IUser {
     session: string;
     iat: number;
     exp: number;
-  }
+}
+
 
 
 

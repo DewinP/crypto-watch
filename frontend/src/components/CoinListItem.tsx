@@ -45,25 +45,18 @@ const CoinListItem: React.FC<{
         {coin?.market_cap_rank}
       </Td>
       <Td>
-        <Link href={`https://www.coingecko.com/en/coins/${coin.id}`}>
-          <Tooltip
-            hasArrow
-            placement="top-start"
-            aria-label="redirect to coingecko.com"
-            label={`coingecko.com/en/coins/${coin.id}`}
-          >
-            <Flex _hover={{ cursor: "pointer" }}>
-              <Image boxSize="30px" mr={10} src={coin.image} />
-              <Box color="back">
-                <Heading size="sm" fontWeight={400}>
-                  {coin?.id[0].toUpperCase() + coin.id.slice(1)}
-                </Heading>
-                <Text color="blackAlpha.500" fontSize="13px">
-                  {coin?.symbol.toUpperCase()}
-                </Text>
-              </Box>
-            </Flex>
-          </Tooltip>
+        <Link href={`/${coin?.id}`}>
+          <Flex _hover={{ cursor: "pointer" }}>
+            <Image boxSize="30px" mr={10} src={coin.image} />
+            <Box color="back">
+              <Heading size="sm" fontWeight={400}>
+                {coin?.id[0].toUpperCase() + coin.id.slice(1)}
+              </Heading>
+              <Text color="blackAlpha.500" fontSize="13px">
+                {coin?.symbol.toUpperCase()}
+              </Text>
+            </Box>
+          </Flex>
         </Link>
       </Td>
       <Td display={{ base: "none", md: "table-cell" }}>
@@ -75,9 +68,7 @@ const CoinListItem: React.FC<{
             })}
           </Heading>
           <Text
-            color={
-              coin?.price_change_percentage_24h < 0 ? "red.400" : "green.400"
-            }
+            color={coin?.price_change_24h < 0 ? "red.400" : "green.400"}
             fontSize="13px"
           >
             {coin?.price_change_percentage_24h > 0 && "+"}
