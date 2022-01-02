@@ -38,7 +38,7 @@ Back-End:
 
 ###### Gif of user flow:
 
-![](https://im2.ezgif.com/tmp/ezgif-2-f1311837ba.gif)
+![crytop watch](https://user-images.githubusercontent.com/62264413/147864847-ca103531-28ec-4a84-a04d-c7e5db41c893.gif)
 
 ###### Landing Page
 
