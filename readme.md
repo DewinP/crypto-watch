@@ -58,7 +58,7 @@ $ npm run dev
 To setup and run the `frontend` run the fallowing commands in the command line, from the root directory.
 
 ```
-$ cd backend
+$ cd frontend
 $ npm i or npm install
 $ npm run dev
 ```
