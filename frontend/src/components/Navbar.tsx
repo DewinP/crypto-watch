@@ -84,6 +84,8 @@ const AuthNavbar: React.FC<{ user: IUser }> = ({ user }) => {
             <MenuItem
               onClick={async () => {
                 await logout();
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("refreshToken");
                 router.push("/login");
               }}
             >

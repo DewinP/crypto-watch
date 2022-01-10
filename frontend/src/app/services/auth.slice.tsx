@@ -25,8 +25,8 @@ export const authSlice = createSlice({
     build.addMatcher(
       api.endpoints.loginUser.matchFulfilled,
       (state, { payload }) => {
-        if (payload._id) {
-          state.user = payload;
+        if (payload.user._id) {
+          state.user = payload.user;
           state.isLoggedIn = true;
         }
       }
@@ -74,6 +74,11 @@ export const authSlice = createSlice({
       state.isFetching = false;
     });
     build.addMatcher(api.endpoints.logout.matchRejected, (state) => {
+      state.user = undefined;
+      state.likeCoins = {};
+      state.isLoggedIn = false;
+    });
+    build.addMatcher(api.endpoints.logout.matchFulfilled, (state) => {
       state.user = undefined;
       state.likeCoins = {};
       state.isLoggedIn = false;

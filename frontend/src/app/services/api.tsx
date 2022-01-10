@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   IFavoriteCoin,
   ILoginInput,
+  ISessionPayload,
   ISignupInput,
   IUser,
 } from "../../interfaces";
@@ -9,7 +10,13 @@ import {
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:1337/api",
+    baseUrl: `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}`,
+    prepareHeaders: (headers) => {
+      headers.set("x-access-token", localStorage.getItem("accessToken"));
+      headers.set("x-refresh-token", localStorage.getItem("refreshToken"));
+
+      return headers;
+    },
   }),
   tagTypes: ["Me", "FavoriteCoin"],
   endpoints: (build) => {
@@ -35,7 +42,7 @@ export const api = createApi({
           body: input,
         }),
       }),
-      loginUser: build.mutation<IUser, ILoginInput>({
+      loginUser: build.mutation<ISessionPayload, ILoginInput>({
         query: (input) => ({
           url: "sessions",
           method: "POST",

@@ -29,10 +29,11 @@ const Login: React.FC = () => {
         initialValues={initialValues}
         onSubmit={async (values, { setErrors }) => {
           try {
-            await login(values).unwrap();
-            setTimeout(() => {
-              router.push("/");
-            }, 100);
+            const { accessToken, refreshToken } = await login(values).unwrap();
+            console.log(accessToken, refreshToken);
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
+            window.location.href = "/";
           } catch (error) {
             if (error.status === 400) {
               setErrors(toErrorMap(error.data));
