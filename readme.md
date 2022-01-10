@@ -34,6 +34,35 @@ Back-End:
 - JWT (JSON Web Token)
 - Node
 
+# Installation
+
+To get this project ot run localy, download or clone this repository. You should now have two folders `frontend` and `backend`.
+
+To install the `backend` run the fallowing commands in the command line, from the root directory.
+
+```
+$ cd backend
+$ npm i or npm install
+$ cd config
+- visit mongodb.com and create a database and make sure you add you whitelist your ip address so that you can access your database.
+- open the `default.ts` file and add/change the variables according to your liking.
+```
+
+To run the `backend` server.
+
+```
+$ npm run dev
+ -code will run in the port on the localhost:1337, unless changed in the `config.ts` file.
+```
+
+To setup and run the `frontend` run the fallowing commands in the command line, from the root directory.
+
+```
+$ cd frontend
+$ npm i or npm install
+$ npm run dev
+```
+
 # Screenshots and GIFs of fully responsive website:
 
 ###### Gif of user flow:
