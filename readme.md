@@ -2,6 +2,8 @@
 
 This is a simple application that allows you to track the value of a cryptocurrency and allows you to like and share the value of the cryptocurrency.
 
+Check it out: [https://crypto-watch-kappa.vercel.app/](https://crypto-watch-kappa.vercel.app/)
+
 # Functionalities
 
 As a guest/unathorized user, they can
